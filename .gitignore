@@ -1,0 +1,35 @@
+_site
+.bundle
+.DS_store
+.idea
+.jekyll-cache
+.jekyll-metadata
+.ruby-version
+.sass-cache
+.tweet-cache
+.venv
+assets/libs/
+assets/rendercv/rendercv_output/*.typ
+al-folio-upgrade-report.md
+node_modules/
+output/playwright/
+test-results/
+vendor
+
+# Python bytecode from bin/ helper scripts
+__pycache__/
+*.pyc
+.ipynb_checkpoints
+
+# CV: generated from papers.bib / teaching.md by cv/prepare.py, plus build artifacts
+cv/cv.bib
+cv/teaching.tex
+cv/*.log
+cv/*.aux
+cv/*.bbl
+cv/*.blg
+cv/*.out
+cv/*.run.xml
+
+# Layout mockups rendered for review, not part of the site
+assets/img/preview_*.png

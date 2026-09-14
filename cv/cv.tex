@@ -1,0 +1,160 @@
+\documentclass[11pt,a4paper]{article}
+
+% ---------------------------------------------------------------- page
+\usepackage[a4paper,top=18mm,bottom=17mm,left=22mm,right=22mm,
+            headsep=7mm,footskip=11mm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}          % kerning + margin protrusion
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{xcolor}
+\usepackage{fontawesome5}
+\usepackage{academicons}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{accent}{HTML}{16365C}   % one accent, used only for links
+\hypersetup{colorlinks=true, urlcolor=accent, linkcolor=accent,
+            pdftitle={Duo Yang - Curriculum Vitae}, pdfauthor={Duo Yang},
+            pdfsubject={Curriculum Vitae},
+            pdfkeywords={natural language processing, tabular data, knowledge graphs,
+                         table representation learning, retrieval-augmented generation}}
+
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{2em}
+\raggedright                      % never justify a CV
+\widowpenalty=10000 \clubpenalty=10000
+\hyphenpenalty=10000 \exhyphenpenalty=10000  % ragged right: don't hyphenate
+
+% ---------------------------------------------------------------- headings
+% more space above than below: the header binds to what follows
+\titleformat{\section}{\normalsize\bfseries\scshape}{}{0pt}{}
+\titlespacing*{\section}{0pt}{12pt plus 3pt minus 3pt}{4pt}
+\titleformat{\subsection}{\small\bfseries}{}{0pt}{}
+\titlespacing*{\subsection}{0pt}{9pt plus 2pt minus 1pt}{3pt}
+
+% ---------------------------------------------------------------- helpers
+\newcommand{\cvdot}{\,\textperiodcentered\,}
+\newcommand{\ic}[1]{\texorpdfstring{#1\,}{}}
+\newcommand{\cvann}[1]{{\small #1}}
+\newcommand{\cvlinks}[1]{{\small #1}}
+
+% date rail on the left, content indented -- one alignment system throughout
+\newlength{\raillen}\setlength{\raillen}{30mm}
+\newcommand{\cvrow}[2]{%
+  \noindent\parbox[t]{\raillen}{\small #1}%
+  \parbox[t]{\dimexpr\linewidth-\raillen\relax}{#2}\par\vspace{3pt}}
+\newcommand{\cvrowsub}[3]{%
+  \noindent\parbox[t]{\raillen}{\small #1}%
+  \parbox[t]{\dimexpr\linewidth-\raillen\relax}{#2\\[1pt]{\small #3}}\par\vspace{5pt}}
+
+\pagestyle{fancy}\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[L]{\scriptsize\itshape Duo Yang}
+\fancyhead[R]{\scriptsize\itshape Curriculum Vitae}
+\fancypagestyle{first}{\fancyhf{}%
+}
+
+% ---------------------------------------------------------------- bibliography
+\usepackage[backend=bibtex,style=numeric,sorting=ydnt,maxbibnames=99,
+            giveninits=true,doi=true,url=false,defernumbers=true]{biblatex}
+\AtEveryBibitem{\clearfield{issn}\clearfield{isbn}\clearfield{month}}
+\addbibresource{cv.bib}
+
+% bold the CV owner in every author list
+% Bold my own name in every author list. \mkbibnamefamily never fires with
+% the bibtex backend, and \ifstrequal does not expand \namepartfamily --
+% \ifdefstring compares the macro's definition, which is what works here.
+\DeclareNameFormat{default}{%
+  \ifdefstring{\namepartfamily}{Yang}%
+    {\textbf{\usebibmacro{name:given-family}
+       {\namepartfamily}{\namepartgiveni}{\namepartprefix}{\namepartsuffix}}}%
+    {\usebibmacro{name:given-family}
+       {\namepartfamily}{\namepartgiveni}{\namepartprefix}{\namepartsuffix}}%
+  \usebibmacro{name:andothers}}
+
+\DeclareFieldFormat{titlecase}{#1}
+\DeclareFieldFormat[inproceedings,inbook,article,incollection]{title}{\textbf{#1}}
+\DeclareFieldFormat{booktitle}{\emph{#1}}   % venue in italics -- the one legit italic
+\DeclareFieldFormat{journaltitle}{\emph{#1}}
+\DeclareFieldFormat{doi}{\href{https://doi.org/#1}{\aiDoi}}
+\renewcommand*{\bibfont}{\small}
+\setlength{\bibitemsep}{3.5pt}
+\setlength{\bibhang}{1.6em}                 % hanging indent
+
+\begin{document}
+\thispagestyle{first}
+
+% ---------------------------------------------------------------- header
+{\LARGE\bfseries\href{https://duo0301.github.io}{\textcolor{black}{Duo Yang}}}\quad
+{\small\href{mailto:duo.yang@kuleuven.be}{duo.yang@kuleuven.be}}\hfill
+{\small
+\href{https://duo0301.github.io}{\faGlobe} \cvdot{}
+\href{https://orcid.org/0009-0008-5942-3397}{\aiOrcid} \cvdot{}
+\href{https://scholar.google.com/citations?user=apSK8IcAAAAJ}{\aiGoogleScholar} \cvdot{}
+\href{https://github.com/duo0301}{\faGithub} \cvdot{}
+\href{https://www.linkedin.com/in/duo-yang-614526231}{\faLinkedin}}\\[3pt]
+{\normalsize PhD Researcher in Computer Science \cvdot{} KU Leuven}
+\vspace{4pt}\hrule height 0.5pt
+\vspace{2pt}
+
+\section*{Research interests}
+Natural language processing, tabular data and knowledge graphs, working towards
+artificial intelligence for data integration. Particular interest in table
+representation learning and the problems it raises, such as data scarcity, and in
+retrieval-augmented generation for industrial use cases such as troubleshooting.
+
+\section*{Experience}
+\cvrowsub{2023 --\,now}{\textbf{Doctoral Researcher}\cvdot{}\href{https://dtai.cs.kuleuven.be/}{DTAI},
+  \href{https://www.kuleuven.be/kuleuven}{KU Leuven}\cvdot{}E2E core lab,
+  \href{https://www.kuleuven.be/flandersmake}{Flanders Make@KU Leuven}}
+  {Table representation learning and semantic table annotation; knowledge graph
+   construction and ontology engineering. Technical solutions for industrial partners,
+   including retrieval-augmented generation systems for troubleshooting and
+   ontology-driven root cause analysis. Advisor:
+   \href{https://www.kuleuven.be/wieiswie/en/person/00142590}{Prof.\ Anastasia Dimou}.}
+
+\section*{Education}
+\cvrow{2023 --\,now}{\textbf{PhD in Computer Science}\cvdot{}\href{https://www.kuleuven.be/kuleuven}{KU Leuven}, Belgium}
+\cvrow{2020--2022}{\textbf{MSc in IT \& Cognition}\cvdot{}\href{https://www.ku.dk/}{University of Copenhagen}, Denmark}
+\cvrow{2014--2018}{\textbf{BEng in Telecommunication Engineering}\cvdot{}\href{https://en.szu.edu.cn/}{Shenzhen University}, China}
+
+\section*{Publications}
+{\small \textdagger\ equal contribution.\quad \textbf{Bold} marks my name.\quad
+\faFilePdf\,paper \quad \faFilePowerpoint\,slides \quad \faImage\,poster \quad \faGlobe\,project site \quad \faDatabase\,data \quad \aiDoi\,DOI}
+\vspace{2pt}
+\nocite{*}
+\printbibliography[keyword=conference, heading=subbibliography, title={Peer-reviewed conference papers}]
+\printbibliography[keyword=workshop,   heading=subbibliography, title={Workshop and challenge papers}]
+\printbibliography[keyword=demo,       heading=subbibliography, title={Demonstrations and posters}]
+
+\section*{Awards and honours}
+\cvrow{2024}{Best Poster Award, E2E cluster\cvdot{}Flanders Make Scientific Conference}
+\cvrow{2023}{Accuracy track, \textbf{1st Prize}\cvdot{}SemTab 2023 challenge @ ISWC \href{https://sem-tab-challenge.github.io/2023/}{\faLink}}
+
+\section*{Software and datasets}
+\cvrowsub{}{\href{https://dtai-kg.github.io/MLSO/}{\textbf{MLSea / MLSO ontology}}}
+  {Semantic layer and ontology for discoverable machine learning metadata.}
+\cvrowsub{}{\href{https://rexpek.github.io/ishikawa-diagram-ontology/ishikawa-diagram-ontology/latest/index.html}{\textbf{Ishikawa Diagram Ontology}}}
+  {Domain ontology supporting root cause analysis.}
+
+\section*{Talks}
+\cvrowsub{2026}{Label-Constrained Column Annotation with Language Models and Graph Neural Networks}
+  {ICDE 2026, conference talk \cvdot{} \href{https://docs.google.com/presentation/d/1y3FvEmdQ3s1inufP0be86mznur9UYWVu/preview}{\faFilePowerpoint}}
+\cvrowsub{2023}{TorchicTab: Semantic Table Annotation with Wikidata and Language Models}
+  {SemTab challenge @ ISWC 2023, challenge talk \cvdot{} \href{https://docs.google.com/presentation/d/1A7MwTxjogUsiJzF5Qi6_Me5PJjj2fNy2/preview}{\faFilePowerpoint}}
+
+\section*{Teaching}
+\input{teaching.tex}
+\CourseRows
+
+\section*{Master's thesis supervision}
+\ThesisRows
+
+\section*{Availability}
+Seeking a \textbf{research internship} in winter/spring 2026--2027, and
+\textbf{full-time researcher or scientist positions} from July 2027.
+
+\end{document}

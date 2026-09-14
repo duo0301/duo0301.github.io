@@ -1,0 +1,29 @@
+# Colours and links for the `abbr` badges on publications.
+# Key must match the `abbr` field in the .bib entry.
+
+"ICDE":
+  url: https://icde2026.github.io/
+  color: "#00369f"
+
+"ISWC":
+  url: https://swsa.semanticweb.org/
+  color: "#0b5394"
+
+"ESWC":
+  url: https://eswc-conferences.org/
+  color: "#1a7f5a"
+
+"SemTab":
+  url: https://sem-tab-challenge.github.io/2023/
+  color: "#6a3d9a"
+
+"NLDL":
+  url: https://www.nldl.org/
+  color: "#b35806"
+
+"KG-LLM":
+  color: "#8c510a"
+
+"ELLIS":
+  url: https://ellis.eu/
+  color: "#4d4d4d"
