@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",()=>{if("function"!=typeof mediumZoom)return;const e=()=>Math.round(.1*Math.min(window.innerWidth,window.innerHeight)),n=mediumZoom("[data-zoom-figure]",{margin:e(),background:`${getComputedStyle(document.documentElement).getPropertyValue("--global-bg-color")}ee`});window.addEventListener("resize",()=>n.update({margin:e()}))});
