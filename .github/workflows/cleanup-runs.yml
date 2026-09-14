@@ -1,0 +1,41 @@
+# Deletes old workflow runs so the Actions tab does not accumulate forever.
+#
+# Uses the built-in GITHUB_TOKEN with `actions: write`, so no personal access
+# token is needed -- a fine-grained PAT would need an Actions scope, which the
+# one used for pushing deliberately does not have.
+#
+# Runs weekly, and can be triggered by hand from the Actions tab
+# (Cleanup workflow runs -> Run workflow) to clear a backlog immediately.
+name: Cleanup workflow runs
+
+on:
+  schedule:
+    - cron: "0 3 * * 0" # 03:00 UTC every Sunday
+  workflow_dispatch:
+    inputs:
+      retain_days:
+        description: "Delete runs older than this many days"
+        required: false
+        default: "7"
+      dry_run:
+        description: "List what would be deleted without deleting"
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete old workflow runs
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: ${{ github.event.inputs.retain_days || 7 }}
+          keep_minimum_runs: 3
+          dry_run: ${{ github.event.inputs.dry_run || false }}
