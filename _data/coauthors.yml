@@ -1,0 +1,6 @@
+# Turns coauthor names in your .bib into links. Keyed by lowercase surname.
+# Example:
+#
+# "smith":
+#   - firstname: ["Jane", "J.", "J. A."]
+#     url: https://example.com/jane-smith

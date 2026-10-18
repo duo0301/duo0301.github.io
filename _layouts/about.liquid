@@ -1,0 +1,106 @@
+---
+layout: default
+---
+<div class="post">
+  {%- comment -%}
+    Local override: the page title and subtitle are dropped. The navbar shows
+    the name on every page, so repeating it as an <h1> here, with the
+    affiliations that the bio already states, was saying it all twice.
+  {%- endcomment -%}
+
+  <article>
+    {% if page.profile %}
+      <div class="profile float-{% if page.profile.align == 'left' %}left{% else %}right{% endif %}">
+        {% if page.profile.image %}
+          {% assign profile_image_path = page.profile.image | prepend: 'assets/img/' %}
+          {% if page.profile.image_circular %}
+            {% assign profile_image_class = 'img-fluid z-depth-1 rounded-circle' %}
+          {% else %}
+            {% assign profile_image_class = 'img-fluid z-depth-1
+      rounded' %}
+          {% endif %}
+          {% capture sizes %}(min-width: {{ site.max_width }}) {{ site.max_width | minus: 30 | times: 0.20}}px, (min-width: 576px)
+      20vw, 95vw"{% endcapture %}
+          {%
+            include figure.liquid loading="eager" path=profile_image_path class=profile_image_class sizes=sizes alt=page.profile.image
+            cache_bust=true
+          %}
+        {% endif %}
+        {% if page.profile.more_info %}
+          <div class="more-info">{{ page.profile.more_info }}</div>
+        {% endif %}
+
+      <!-- Social -->
+      {% if page.social %}
+        <div class="social">
+          <div class="contact-icons">
+            {%- comment -%}
+              Local override: jekyll-socials emits a raw `mailto:` for the email entry and
+              al_folio_core never pipes it through al_email_protect. Capture its output and
+              rewrite it here, which is the interception point the plugin documents.
+            {%- endcomment -%}
+            {%- capture social_markup -%}{% social_links %}{%- endcapture -%}
+            {%- comment -%}
+              al_email_protect_html folds the original attributes into `class`, so the
+              icon-only anchor loses its title and ends up with no accessible name.
+              Repair it; the replace is a no-op if the upstream gem stops doing this.
+            {%- endcomment -%}
+            {%- comment -%}
+            jekyll-socials names each tooltip after the config key it came from
+            ("Github username", "Scholar userid"). Rewrite to the platform names
+            and add aria-label; these anchors hold only an <i>, so without one
+            they have no accessible name. The gem emits single-quoted attributes
+            at capture time, so match title='...' not title="...".
+          {%- endcomment -%}
+          {%- assign social_markup = social_markup | replace: "title='Github username'", "title='GitHub' aria-label='GitHub'" | replace: "title='Scholar userid'", "title='Google Scholar' aria-label='Google Scholar'" | replace: "title='Orcid id'", "title='ORCID' aria-label='ORCID'" | replace: "title='Linkedin username'", "title='LinkedIn' aria-label='LinkedIn'" -%}
+          {%- assign social_protected = social_markup | al_email_protect_html -%}
+            {%- comment -%}
+              The rewriter folds the original `title` into `class`, leaving this icon-only
+              anchor with no accessible name. Re-add one on the stable opening-tag prefix.
+            {%- endcomment -%}
+            {%- assign social_protected = social_protected | replace: '<a href="#" class="al-email-protect', '<a href="#" aria-label="Email" title="Email" class="al-email-protect' -%}
+            {{ social_protected }}
+          </div>
+
+          <div class="contact-note">{{ site.contact_note }}</div>
+        </div>
+      {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="clearfix">{{ content }}</div>
+
+    <!-- News -->
+    {% if page.announcements and page.announcements.enabled %}
+      <h2>
+        <a href="{{ '/news/' | relative_url }}" style="color: inherit">news</a>
+      </h2>
+      {% include news.liquid limit=true %}
+    {% endif %}
+
+    <!-- Latest posts -->
+    {% if page.latest_posts and page.latest_posts.enabled %}
+      <h2>
+        <a href="{{ '/blog/' | relative_url }}" style="color: inherit">latest posts</a>
+      </h2>
+      {% include latest_posts.liquid %}
+    {% endif %}
+
+    <!-- Selected papers -->
+    {% if page.selected_papers %}
+      <h2>
+        <a href="{{ '/publications/' | relative_url }}" style="color: inherit">selected papers</a>
+      </h2>
+      {% include selected_papers.liquid %}
+    {% endif %}
+
+
+    {% if site.newsletter and site.newsletter.enabled and site.footer_fixed %}
+      {% if site.plugins contains 'al_newsletter' %}
+        {% include plugins/al_newsletter_form_center_margin.liquid %}
+      {% else %}
+        {% include newsletter.liquid center=true %}
+      {% endif %}
+    {% endif %}
+  </article>
+</div>

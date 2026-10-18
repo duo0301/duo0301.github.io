@@ -1,0 +1,22 @@
+{%- comment -%}
+  Local override. Upstream renders one flat list:
+      {% bibliography --group_by none --query @*[selected=true]* %}
+
+  Split it into two themed blocks instead. Two explicit queries rather than
+  --group_by topic, so the order and the heading wording are both explicit --
+  --group_by would sort groups alphabetically and force the heading text to
+  equal the raw field value.
+
+  Conditions inside [...] are AND-ed on a comma (bibtex-ruby elements.rb).
+  A selected entry with no topic matches neither query and silently
+  disappears, so keep topic in sync with selected in papers.bib.
+{%- endcomment -%}
+<h3 class="topic">Tabular data</h3>
+<div class="publications">
+  {% bibliography --group_by none --query @*[selected=true, topic=tabular]* %}
+</div>
+
+<h3 class="topic">Semantic web</h3>
+<div class="publications">
+  {% bibliography --group_by none --query @*[selected=true, topic=kg]* %}
+</div>

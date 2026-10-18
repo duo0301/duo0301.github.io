@@ -1,0 +1,352 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+@charset "utf-8";
+
+/* Built-in Sass modules you’ll likely use across partials */
+@use "sass:math";
+@use "sass:string";
+
+/* Configure your design tokens BEFORE loading any of your partials.
+   Make sure `_sass/_variables.scss` declares `$max-content-width: 72rem !default;` */
+@use "variables" with (
+  $max-content-width: {{ site.max_width | default:  "930px" }}
+);
+
+/* Your project partials — convert these files to `@use "variables";`
+   (or `@use "variables" as *;`) inside each file and qualify variables if needed. */
+@use "themes";
+@use "layout";
+
+// Core styles organized by usage
+@use "typography";
+@use "navbar";
+@use "footer";
+@use "blog";
+@use "publications";
+@use "components";
+@use "utilities";
+
+// Other specialized styles
+@use "tabs";
+@use "teachings";
+@use "typograms";
+
+/* The address block under the photo: smaller and tighter than the theme's
+   default, which inherits body size in a monospace face. */
+.profile .more-info {
+  line-height: 1.35;
+  margin-top: 0.4rem;
+  margin-bottom: 0;
+  /* This block holds a photo caption now, not a postal address, so drop the
+     theme's monospace and let it read as a caption. */
+  font-family: inherit;
+  font-style: italic;
+  color: var(--global-text-color-light);
+  /* keep the caption on one line under the photo */
+  font-size: 0.54rem;
+  white-space: nowrap;
+  text-align: center;
+}
+
+@media (max-width: 575.98px) {
+  .profile .more-info {
+    font-size: 0.75rem;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Two-state theme toggle.
+
+   The theme ships three icons and picks one from `data-theme-setting`, which is
+   "system" until the visitor clicks. With the toggle reduced to light/dark
+   (assets/js/theme.js) that third icon would still greet every first-time
+   visitor. Drive the icon off `data-theme` instead -- the computed theme, which
+   applyTheme() always resolves to "light" or "dark" -- so the button shows the
+   theme actually on screen from the very first paint.
+   --------------------------------------------------------------------------- */
+#light-toggle-system {
+  display: none !important;
+}
+
+html[data-theme="dark"] {
+  #light-toggle-dark {
+    display: inline-block;
+  }
+  #light-toggle-light {
+    display: none;
+  }
+}
+
+html[data-theme="light"] {
+  #light-toggle-light {
+    display: inline-block;
+  }
+  #light-toggle-dark {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Theme labels above each group of selected papers (see
+   _includes/selected_papers.liquid). The "selected papers" h2 already carries
+   the section's weight, so these only need to separate: small, uppercase and
+   muted, deliberately lighter than both that heading and the paper titles.
+   --------------------------------------------------------------------------- */
+.topic {
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--global-text-color-light);
+  margin: 1.2rem 0 0.3rem;
+
+  &:first-of-type {
+    margin-top: 0.4rem;
+  }
+}
+
+/* The equal-contribution legend now sits at the end of the author line
+   (see _layouts/bib.liquid); keep it clearly subordinate to the names. */
+.author-note {
+  font-size: 0.72rem;
+  color: var(--global-text-color-light);
+  white-space: nowrap;
+
+  &::before {
+    content: " · ";
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Availability / job-market notice at the top of the about page. Restrained on
+   purpose: a left accent rule and a tinted card, not a coloured alert box --
+   it should read as a standing fact about the author, not as a warning.
+   --------------------------------------------------------------------------- */
+.availability {
+  /* The profile photo floats right. Without its own block formatting context
+     this card slides underneath it, and since the card has a background the
+     photo paints on top. flow-root makes it respect the float and stop at the
+     photo's edge instead. */
+  display: flow-root;
+  border-left: 3px solid var(--global-theme-color);
+  background-color: var(--global-card-bg-color);
+  border-radius: 0 4px 4px 0;
+  padding: 0.7rem 1rem;
+  margin-bottom: 1.4rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+
+  p {
+    margin: 0;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Profile photo column. The theme gives it 30% of the content width on
+   desktop; that reads as oversized next to a short bio.
+
+   >>> To resize the photo, change this one number and rebuild. <<<
+   Keep _layouts/about.liquid's `sizes` hint on the same value, so the browser
+   still picks the right WebP variant.
+   --------------------------------------------------------------------------- */
+$profile-width: 20%;
+
+@media (min-width: 576px) {
+  .profile {
+    width: $profile-width;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Navbar: taller, with a larger name. The theme sizes the brand for a bar that
+   also carried the social icons; with the icons moved under the photo the bar
+   can breathe and the name can take the space.
+   --------------------------------------------------------------------------- */
+$navbar-pad: 1.1rem;
+$navbar-name: 1.8rem;
+
+/* The theme clears its fixed navbar with a hardcoded `body.fixed-top-nav
+   { padding-top: 57px }`, sized for Bootstrap's .5rem padding and a 1.25rem
+   brand. Growing the bar without growing that number hides the top of every
+   page behind it. Derive it so the two cannot drift apart again. */
+$navbar-height: calc(57px + 2 * (#{$navbar-pad} - 0.5rem) + (#{$navbar-name} - 1.25rem));
+
+body.fixed-top-nav {
+  padding-top: $navbar-height;
+}
+
+html {
+  scroll-padding-top: $navbar-height;
+}
+
+#navbar {
+  padding-top: $navbar-pad;
+  padding-bottom: $navbar-pad;
+}
+
+.navbar-brand.title {
+  font-size: $navbar-name;
+  line-height: 1.2;
+}
+
+@media (max-width: 575.98px) {
+  .navbar-brand.title {
+    font-size: 1.25rem;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Social icons under the profile photo. The theme sizes .contact-icons at 4rem
+   for a full-width block at the bottom of the page; in a 24% column that
+   overflows, so scale them to the column.
+   --------------------------------------------------------------------------- */
+$profile-icon-size: 1.4rem;
+
+.profile {
+  .social {
+    margin-top: 0.5rem;
+
+    .contact-icons {
+      font-size: $profile-icon-size;
+      line-height: 1.6;
+      white-space: nowrap;
+
+      a {
+        margin: 0 0.12rem;
+
+        img,
+        svg {
+          width: $profile-icon-size;
+          height: $profile-icon-size;
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .contact-note {
+      font-size: 0.7rem;
+      line-height: 1.4;
+    }
+  }
+}
+
+@media (max-width: 575.98px) {
+  .profile .social .contact-icons {
+    font-size: 1.4rem;
+  }
+}
+
+/* footer_fixed is off, so the theme's 70px bottom reserve for a pinned footer
+   is now just dead space at the end of every page. */
+body {
+  padding-bottom: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Reading measure. max_width is 930px, which at 16px gives ~113 characters per
+   line; comfortable prose is 60-75. Constrain the bio paragraphs only, so the
+   publications list keeps the full width it needs for badge + title + buttons.
+   --------------------------------------------------------------------------- */
+.post .clearfix > p {
+  line-height: 1.6;
+}
+
+
+/* ---------------------------------------------------------------------------
+   The site owner's name in an author list. _layouts/bib.liquid wraps it in
+   <strong>; underline it as well so it is findable at a glance in a long list.
+   text-underline-offset keeps the rule clear of the descender in "y".
+   --------------------------------------------------------------------------- */
+.author strong {
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 0.06em;
+}
+
+/* ---------------------------------------------------------------------------
+   Footer. With footer_fixed off the theme uses .sticky-bottom, which is styled
+   far heavier than the fixed variant: 40px of padding top and bottom and
+   0.9rem text, for a single line of copyright. Bring it back in line.
+   --------------------------------------------------------------------------- */
+footer.sticky-bottom {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-size: 0.7rem;
+}
+
+/* ---------------------------------------------------------------------------
+   The scroll progress bar is pinned at top: 56px, a constant sized for the
+   theme's original navbar. Ours is taller, so the bar was floating inside it.
+   Pin it to the real navbar height instead.
+   --------------------------------------------------------------------------- */
+progress,
+.progress-container {
+  top: $navbar-height;
+}
+
+/* Publication thumbnail. Two things are wanted at once: every thumbnail the
+   same size on the page, and the click opening the figure at its own shape.
+
+   Padding the files themselves cannot do both. medium-zoom computes its scale
+   from the thumbnail element's rect and then swaps in data-zoom-src, so a
+   source with a different aspect ratio is scaled against the wrong box.
+
+   So the uniform box lives here instead: <figure> is a fixed 125x69 flex cell
+   and the image is letterboxed inside it, keeping its native ratio. The <img>
+   element therefore still reports its true shape and the zoom maths holds.
+   The box sits directly under the venue badge rather than being pushed to the
+   bottom of the column. margin-top:auto would align it with the entry's last
+   line, but the column grows when the hidden BibTeX block is expanded, so the
+   thumbnail moved down on every toggle. A fixed offset keeps it still. */
+.col-sm-2.abbr {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  figure {
+    margin: 0;
+    margin-top: 0.45rem;
+    height: 69px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* white, so the letterboxing reads as padding and every thumbnail is the
+       same visible rectangle. The diagrams are white-backed, so the box is
+       continuous with them. */
+    background: #ffffff;
+    border-radius: 3px;
+    overflow: hidden;
+    /* The theme's .z-depth-1 moved off the image and onto the box, so the edge
+       traces the uniform card. A white card on a white page needs more than
+       z-depth-1 to read at all, so it is deepened and given a hairline rim. */
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.16),
+      0 3px 10px rgba(0, 0, 0, 0.14);
+  }
+
+  .preview {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    box-shadow: none;
+    cursor: zoom-in;
+  }
+}
+
+/* Venue badge text. Two problems: a venue with a url renders its label inside
+   an <a> and one without renders a <div> (KG-LLM is the only one without), and
+   they picked up different colours. The theme also ties badge text to
+   --global-card-bg-color, which is white in light mode but #212529 in dark, so
+   the label went near-black on a dark badge. Every badge background in
+   venues.yml is a dark saturated colour, so pin the label to white outright. */
+abbr.badge {
+  color: #ffffff !important;
+
+  a,
+  div {
+    color: #ffffff !important;
+  }
+}
