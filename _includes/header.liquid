@@ -131,16 +131,17 @@
             Local override: the resume is a file, not a page. It is added here
             rather than as a _pages entry so no /resume/ page is generated -- the
             link downloads the PDF and leaves the visitor where they are.
+            The PDF is hosted on Google Drive; the uc?export=download form of the
+            share link downloads the file instead of opening Drive's viewer.
+            Replacing the file on Drive (Manage versions) keeps this link valid.
           {%- endcomment -%}
           <li class="nav-item">
-            {%- comment -%}
-              TEMPORARILY DISABLED. To re-enable the download, restore the href:
-                <a class="nav-link" href="{{ '/cv/resume.pdf' | relative_url }}" download="resume_duo.pdf">resume</a>
-              An <a> with no href keeps the styling but is inert: clicking does
-              nothing and the page does not move. The download attribute names
-              the saved file, which is why the repo path stays cv/resume.pdf.
-            {%- endcomment -%}
-            <a class="nav-link">resume</a>
+            <a
+              class="nav-link"
+              href="https://drive.google.com/uc?export=download&id=1evdYaVgvw9nymwk0gu_b_rk9XOoM0gXW"
+              rel="external nofollow noopener"
+              >resume</a
+            >
           </li>
           {% if site.search_enabled %}
             <!-- Search -->
