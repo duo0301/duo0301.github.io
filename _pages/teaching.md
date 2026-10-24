@@ -20,5 +20,5 @@ come from.
 ### Master thesis
 
 - Ontology Matching with Large Language Models: An Experimental Comparison (academic year 2025-2026)
-- Numerical Table Analysis with Language Models (academic year 2025-2026)
+- Numerical Table Analysis with Pretrained Language Models (academic year 2025-2026)
 - Column Qualifier Annotation Using Pretrained Language Model (academic year 2023-2024)
