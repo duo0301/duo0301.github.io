@@ -34,7 +34,7 @@ artificial intelligence for data integration. For an overview of my PhD works, y
 [these slides](https://docs.google.com/presentation/d/1mNJt4FjfktZF2nnLm_THIaTv0gjxqHhJYPWbi7arpZc/preview)
 (7 min read). At Flanders Make, I also develop
 RAG systems that support root cause analysis in industrial
-use cases.
+use cases ([demo](https://kg.cs.kuleuven.be/ishi/)).
 
 <div class="availability" markdown="1">
 **Open to job opportunities.** I'm looking for a **research intern position** in
